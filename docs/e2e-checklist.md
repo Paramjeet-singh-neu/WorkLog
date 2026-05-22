@@ -53,8 +53,52 @@ In your Discord test server:
 8. Confirm a matching helper receives a DM for the blocked update.
 9. Run `/me` and confirm the bot sends you a profile/activity DM.
 10. Run `/follow user @someone` and confirm the command toggles the follow state.
+11. Run `/follow project project_id:1` and confirm the command toggles the project follow state.
 
-For Discord reply comments, enable **Message Content Intent** in the Discord Developer Portal, restart the bot, then reply directly to a Worklog embed. The reply should appear as a comment in the web UI.
+If `/follow project` does not appear in Discord:
+
+1. Stop all local bot processes (`Ctrl+C` in every terminal running `python -m bot.main`).
+2. Force-sync slash commands to your test guild:
+
+```bash
+source .venv/bin/activate
+python scripts/sync_discord_commands.py
+```
+
+3. Confirm the script output includes:
+
+```text
+/follow -> user, project
+```
+
+4. Start the bot again:
+
+```bash
+python -m bot.main
+```
+
+5. In Discord, type `/follow` and select the **project** subcommand from the autocomplete list.
+6. Enter `1` into the `project_id` field.
+7. If it still does not show, fully quit and reopen Discord or test from the Discord mobile app/browser to clear the client command cache.
+
+For Discord reply comments, enable **Message Content Intent** in the Discord Developer Portal:
+
+1. Open <https://discord.com/developers/applications>.
+2. Select the same application used by your Worklog bot.
+3. Open **Bot** in the left sidebar.
+4. Scroll to **Privileged Gateway Intents**.
+5. Enable **Message Content Intent**.
+6. Click **Save Changes**.
+7. Restart the local bot:
+
+```bash
+source .venv/bin/activate
+python -m bot.main
+```
+
+8. Reply directly to a Worklog embed in the worklog channel.
+9. Open the matching update page in the web UI, for example `http://localhost:3000/updates/UPDATE_ID`.
+10. Confirm the Discord reply appears as a comment.
 
 ## 4. Social Feedback Checks
 

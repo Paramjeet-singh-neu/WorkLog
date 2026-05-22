@@ -76,9 +76,24 @@ class WorklogBot(commands.Bot):
         if settings.discord_guild_id:
             guild = discord.Object(id=settings.discord_guild_id)
             self.tree.copy_global_to(guild=guild)
-            await self.tree.sync(guild=guild)
+            synced = await self.tree.sync(guild=guild)
+            logger.info(
+                "Synced %s slash command(s) to guild %s",
+                len(synced),
+                settings.discord_guild_id,
+            )
+            for cmd in synced:
+                if cmd.options:
+                    logger.info(
+                        "  /%s subcommands: %s",
+                        cmd.name,
+                        ", ".join(option.name for option in cmd.options),
+                    )
+                else:
+                    logger.info("  /%s", cmd.name)
         else:
-            await self.tree.sync()
+            synced = await self.tree.sync()
+            logger.info("Synced %s global slash command(s)", len(synced))
 
 
 bot = WorklogBot()
