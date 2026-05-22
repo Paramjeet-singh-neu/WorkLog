@@ -41,6 +41,15 @@ SettingsDep = Annotated[Settings, Depends(get_settings)]
 AuthorizationHeader = Annotated[str | None, Header()]
 
 
+@app.get("/")
+async def root() -> dict[str, str]:
+    return {
+        "name": "Worklog API",
+        "health": "/health",
+        "docs": "/docs",
+    }
+
+
 @app.get("/health")
 async def health(session: SessionDep) -> dict[str, str]:
     await session.execute(text("select 1"))
