@@ -305,11 +305,7 @@ See [docs/deploy.md](docs/deploy.md) for step-by-step deploy instructions.
 
 ## Documentation
 
-- [Phase 1 E2E Setup](docs/phase1-e2e.md)
-- [Phase 2 Web Viewer](docs/phase2-web.md)
-- [Phase 3 Ranked Feed](docs/phase3-feed.md)
-- [Phase 4 Social Feedback](docs/phase4-social.md)
-- [Phase 5 Digest, Follows, Showcase, Deploy](docs/phase5-polish.md)
+- [E2E Checklist](docs/e2e-checklist.md)
 - [Production Deploy](docs/deploy.md)
 
 ## Security Notes
