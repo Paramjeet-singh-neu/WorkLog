@@ -9,15 +9,19 @@ import type {
   WorklogUser,
 } from "./types";
 
-const apiBaseUrl = process.env.WORKLOG_API_URL ?? "http://127.0.0.1:8000";
+const apiBaseUrl = (process.env.WORKLOG_API_URL ?? "http://127.0.0.1:8000").replace(
+  /\/$/,
+  "",
+);
 
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${apiBaseUrl}${path}`, {
     cache: "no-store",
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!response.ok) {
-    throw new Error(`Worklog API request failed: ${response.status}`);
+    throw new Error(`Worklog API request failed: ${response.status} for ${path}`);
   }
 
   return response.json() as Promise<T>;
@@ -49,6 +53,7 @@ export async function markFeedSeen(viewerDiscordId: string, updateIds: number[])
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ update_ids: updateIds }),
       cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
     },
   );
 
@@ -60,6 +65,7 @@ export async function markFeedSeen(viewerDiscordId: string, updateIds: number[])
 export async function getUserByDiscordId(discordId: string): Promise<WorklogUser | null> {
   const response = await fetch(`${apiBaseUrl}/users/discord/${discordId}`, {
     cache: "no-store",
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (response.status === 404) {
@@ -108,6 +114,7 @@ export async function getAdminSummary(): Promise<AdminSummary> {
   const response = await fetch(`${apiBaseUrl}/admin/summary`, {
     cache: "no-store",
     headers,
+    signal: AbortSignal.timeout(15_000),
   });
 
   if (!response.ok) {

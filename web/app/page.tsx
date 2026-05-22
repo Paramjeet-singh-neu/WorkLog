@@ -27,28 +27,38 @@ function emptySocial(updateId: number): UpdateSocial {
 export default async function FeedPage() {
   const session = await getSession();
   let ranked = false;
-  let updates: Update[];
+  let updates: Update[] = [];
+  let feedError: string | null = null;
 
-  if (session) {
-    ranked = true;
-    updates = await getRankedFeed(session.id);
-    if (updates.length > 0) {
-      await markFeedSeen(
-        session.id,
-        updates.map((update) => update.id),
-      );
+  try {
+    if (session) {
+      ranked = true;
+      updates = await getRankedFeed(session.id);
+      if (updates.length > 0) {
+        await markFeedSeen(
+          session.id,
+          updates.map((update) => update.id),
+        );
+      }
+    } else {
+      updates = await getFeed();
     }
-  } else {
-    updates = await getFeed();
+  } catch (error) {
+    feedError = error instanceof Error ? error.message : "Could not load the feed.";
   }
 
-  const socialByUpdate =
-    updates.length > 0
-      ? await getBatchSocial(
-          updates.map((update) => update.id),
-          session?.id,
-        )
-      : {};
+  let socialByUpdate: Record<number, UpdateSocial> = {};
+  try {
+    socialByUpdate =
+      updates.length > 0
+        ? await getBatchSocial(
+            updates.map((update) => update.id),
+            session?.id,
+          )
+        : {};
+  } catch {
+    socialByUpdate = {};
+  }
 
   return (
     <div className="stack">
@@ -73,7 +83,18 @@ export default async function FeedPage() {
         )}
       </section>
 
-      {updates.length === 0 ? (
+      {feedError ? (
+        <section className="card">
+          <p className="pill">API unavailable</p>
+          <h2>The live API is waking up</h2>
+          <p className="muted">
+            The Discord bot and local demo use the same Neon-backed API. On free hosting, the live
+            API can take a moment to wake up; refresh this page or open the GitHub/Loom links for the
+            full E2E flow.
+          </p>
+          <p className="muted">{feedError}</p>
+        </section>
+      ) : updates.length === 0 ? (
         <section className="card">
           <p className="muted">No updates yet. Post from Discord to fill this feed.</p>
         </section>

@@ -31,7 +31,7 @@ def add_env(key: str, value: str) -> None:
         return
     subprocess.run(
         ["vercel", "env", "add", key, "production", "--force"],
-        input=value.encode(),
+        input=f"{value}\n".encode(),
         cwd=WEB,
         check=True,
     )
