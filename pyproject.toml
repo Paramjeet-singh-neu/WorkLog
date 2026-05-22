@@ -1,0 +1,42 @@
+[project]
+name = "worklog"
+version = "0.1.0"
+description = "Discord-native work updates and blocker routing for project-building cohorts."
+requires-python = ">=3.11"
+dependencies = [
+  "aiohttp>=3.10.0",
+  "alembic>=1.13.3",
+  "apscheduler>=3.10.4",
+  "asyncpg>=0.29.0",
+  "discord.py>=2.4.0",
+  "fastapi>=0.115.0",
+  "google-genai>=1.0.0",
+  "openai>=1.51.0",
+  "pgvector>=0.3.5",
+  "psycopg2-binary>=2.9.9",
+  "pydantic>=2.9.2",
+  "pydantic-settings>=2.5.2",
+  "python-dotenv>=1.0.1",
+  "sqlalchemy[asyncio]>=2.0.35",
+  "uvicorn[standard]>=0.30.6",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.6.9",
+]
+
+[tool.setuptools.packages.find]
+include = ["api*", "bot*", "shared*"]
+exclude = ["migrations*", "docs*", "scripts*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"

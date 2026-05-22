@@ -1,0 +1,168 @@
+:root {
+  color-scheme: light;
+  --background: #f8fafc;
+  --border: #e2e8f0;
+  --muted: #64748b;
+  --panel: #ffffff;
+  --text: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 32px 20px 56px;
+}
+
+.nav {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.nav-links {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.button {
+  background: #111827;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+
+.button.secondary {
+  background: #e2e8f0;
+  color: var(--text);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 0.05);
+  padding: 20px;
+}
+
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.pill {
+  background: #eef2ff;
+  border-radius: 999px;
+  color: #3730a3;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 5px 9px;
+  text-transform: uppercase;
+}
+
+.social-panel {
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+}
+
+.social-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.kudo-button {
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.kudo-button.active {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.kudo-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.comment-list {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.comment-list p {
+  margin: 6px 0 0;
+}
+
+.comment-form {
+  display: grid;
+  gap: 10px;
+}
+
+.comment-form textarea {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font: inherit;
+  padding: 12px;
+  resize: vertical;
+  width: 100%;
+}
+
+.error-text {
+  color: #b91c1c;
+  margin: 0;
+}
+
+.showcase-grid,
+.metric-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.metric strong {
+  display: block;
+  font-size: 32px;
+  line-height: 1;
+}
