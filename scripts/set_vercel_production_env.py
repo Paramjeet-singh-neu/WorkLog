@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -46,14 +47,30 @@ def main() -> None:
 
     if vercel_domain is None:
         result = subprocess.run(
-            ["vercel", "inspect", "--prod", "--json"],
+            ["vercel", "ls", "--json"],
             cwd=WEB,
             capture_output=True,
             text=True,
             check=False,
         )
-        # Fallback: user passes domain or we use latest deployment host from ls
-        vercel_domain = "web-9n4vhjvaa-singhpara-1487s-projects.vercel.app"
+        if result.returncode != 0:
+            raise SystemExit(
+                "Pass the Vercel domain as the second argument, e.g. "
+                "`python scripts/set_vercel_production_env.py https://api.onrender.com "
+                "your-app.vercel.app`"
+            )
+        deployments = json.loads(result.stdout).get("deployments", [])
+        production = next(
+            (
+                deployment
+                for deployment in deployments
+                if deployment.get("target") == "production" and deployment.get("state") == "READY"
+            ),
+            None,
+        )
+        if production is None:
+            raise SystemExit("No ready production Vercel deployment found.")
+        vercel_domain = production["url"]
 
     redirect_uri = f"https://{vercel_domain.rstrip('/')}/api/auth/callback/discord"
     digest_token = web_env.get("DIGEST_TRIGGER_TOKEN") or root_env.get("DIGEST_TRIGGER_TOKEN", "")
