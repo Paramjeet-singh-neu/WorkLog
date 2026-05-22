@@ -1,6 +1,6 @@
 # Worklog Production Deploy
 
-This deploy uses Render for the Python API + Discord bot worker, Vercel for the Next.js web app, and Neon Postgres for data.
+This deploy uses Render for the Python API, Vercel for the Next.js web app, and Neon Postgres for data. The Discord bot can run locally for the demo; deploy it as a Render worker only if your Render plan supports background workers.
 
 ## Quick checklist
 
@@ -21,7 +21,7 @@ source .venv/bin/activate
 python scripts/generate_deploy_env.py
 ```
 
-## Render
+## Render API
 
 1. Push the repo to GitHub.
 2. In Render, open **New → Blueprint** and connect `Paramjeet-singh-neu/WorkLog`.
@@ -39,7 +39,22 @@ python scripts/generate_deploy_env.py
    - `EMBEDDING_PROVIDER` (`gemini` or `openai`)
    - `GEMINI_API_KEY` or `OPENAI_API_KEY`
    - `PUBLIC_BASE_URL=https://worklog-api.onrender.com` (your actual Render URL)
-5. Add these to the **bot worker**:
+## Discord bot worker
+
+Render background workers are not available on every plan. If Blueprint creation fails with `service type is not available for this plan`, keep the bot running locally for the demo:
+
+```bash
+source .venv/bin/activate
+python -m bot.main
+```
+
+If your Render plan supports workers, create a separate background worker with:
+
+```bash
+python -m bot.main
+```
+
+Add these env vars to the **bot worker**:
    - `DISCORD_TOKEN`
    - `DISCORD_GUILD_ID`
    - `WORKLOG_CHANNEL_ID`
